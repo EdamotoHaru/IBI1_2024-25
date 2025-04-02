@@ -1,5 +1,5 @@
 import re  # Import the regular expression module
-splice_comb = input("What is your splice_combination (GTAG, GCAG,ATAC):")  # Get splice combination from user input
+splice_comb = input("What is your splice_combination (GTAG,GCAG,ATAC):")  # Get splice combination from user input
 file_path = "tata_genes.fa"  # Define the file path for the input FASTA file
 donor = splice_comb[0:2]  # Extract donor sequence from splice_combination
 acceptor = splice_comb[2:4]  # Extract acceptor sequence from splice_combination
