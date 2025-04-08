@@ -1,4 +1,5 @@
 DNA = str(input("Enter the DNA sequence: "))  # Prompt user for DNA sequence
+enzyme = str(input("Enter the restriction enzyme recognition sequence: "))  # Prompt user for enzyme sequence
 def find_cut_site(DNA, enzyme):
     valid = set('ACGT')
     if set(DNA) - valid or set(enzyme) - valid:
@@ -10,4 +11,4 @@ def find_cut_site(DNA, enzyme):
         return None
     return position
 
-print("The cut site for this DNA is at the" , find_cut_site(DNA , "ATG"), "position")
+print("The cut site for this DNA is at the" , find_cut_site(DNA , enzyme), "position")
