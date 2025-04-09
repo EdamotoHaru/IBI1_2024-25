@@ -1,46 +1,84 @@
-import panda as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
+import random
+length = int(input("Enter the length of the RNA sequence: "))
+start_codon = random.choice(['AUG', 'AUA', 'AUC', 'AUG'])
+stop_codon = random.choice(['UAA', 'UAG', 'UGA'])
+def generate_random_rna(length):
+    # Define the possible nucleotides
+    nucleotides = ['A', 'C', 'G', 'U']
+    # Generate a random sequence of the specified length
+    return ''.join(random.choice(nucleotides) for _ in range(length))
+# Generate the random RNA sequence
+seq = generate_random_rna(length)
+def check_begin (seq):
+    begin = ["AUG"]
+    leng = len(seq)
+    pos = 0
+    for i in range (leng-2):
+        if seq[i:i+3] in begin:
+            pos = i
+            return (pos,leng)
 
-# 示例数据加载（假设CSV文件包含'日期'和'睡眠时间'两列）
-# 日期格式应为YYYY-MM-DD，睡眠时间为小时数值
-data = pd.read_csv('sleep_data.csv')
-data['日期'] = pd.to_datetime(data['日期'])  # 转换日期格式
+def counter (seq):
+    end = ["UGA","UAA","UAG"]
+    count = {}
+    pos,leng = check_begin(seq)
+    i = pos+3
+    while i+3 <= leng and not(seq[i:i+3] in end) :
+        codon = seq[i:i+3]
+        if not codon in count:
+            count[codon] = 1
+        else:
+            count[codon] += 1
+        i += 3
+    return (count)
+'''
+def max_count (seq):
+    count = counter(seq)
+    a = count.keys(0)
+    b = count[a]
+    max_count_res = {a: b}
+    for i in count.keys():
+        j = 0
+        max_val = max_count_res[max_count_res.keys(j)]
+        while j+1 < len(max_count_res):
+            val = max_count_res[max_count_res.keys(j+1)]
+            if val > max_val:
+                max_val = val
+                max_pos = max_count_res.keys(j+1)
+            j += 1
+        if count[i] >= max_val:
+            max_val = count[i]
+            max_pos = i
+        if not max_pos in max_count_res.keys():
+            max_count_res[max_pos] = 1
+        else:
+            max_count_res[max_pos] += 1
+    return (max_count_res) #This part has problem, the dictionary can't work, maybe change to two-dimensional list can fix!
+'''
+def max_count_2 (seq):
+    count = counter(seq)
+    key = list(count.keys())
+    val = list(count.values())
+    max_val = max(val)
+    max_key =[]
+    for i in range (len(key)):
+        if val[i] == max_val:
+            max_key.append(key[i])
+    return(max_key, max_val)
 
-# 按周重采样计算平均值（默认从周日开始为一周）
-weekly_avg = data.resample('W', on='日期')['睡眠时间'].mean().reset_index()
+def max_ami(codons):
+    codon_amino_acid = [("UUU", "Phe"),("UUC", "Phe"),("UUA", "Leu"),("UUG", "Leu"),("CUU", "Leu"),("CUC", "Leu"),("CUA", "Leu"),("CUG", "Leu"),("AUU", "Ile"),  
+    ("AUC", "Ile"),("AUA", "Ile"),("AUG", "Met"),("GUU", "Val"),("GUC", "Val"),("GUA", "Val"),("GUG", "Val"),("UCU", "Ser"),("UCC", "Ser"),("UCA", "Ser"),("UCG", "Ser"),  
+    ("CCU", "Pro"),("CCC", "Pro"),("CCA", "Pro"),("CCG", "Pro"),("ACU", "Thr"),("ACC", "Thr"),("ACA", "Thr"),("ACG", "Thr"),("GCU", "Ala"),("GCC", "Ala"),("GCA", "Ala"),
+    ("GCG", "Ala"),("UAU", "Tyr"),("UAC", "Tyr"),("UAA", "Stop"),("UAG", "Stop"),("CAU", "His"),("CAC", "His"),("CAA", "Gln"),("CAG", "Gln"),("AAU", "Asn"),("AAC", "Asn"),  
+    ("AAA", "Lys"),("AAG", "Lys"),("GAU", "Asp"),("GAC", "Asp"),("GAA", "Glu"),("GAG", "Glu"),("UGU", "Cys"),("UGC", "Cys"),("UGA", "Stop"),("UGG", "Trp"),("CGU", "Arg"),  
+    ("CGC", "Arg"),("CGA", "Arg"),("CGG", "Arg"),("AGU", "Ser"),("AGC", "Ser"),("AGA", "Arg"),("AGG", "Arg"),("GGU", "Gly"),("GGC", "Gly"),("GGA", "Gly"),("GGG", "Gly")]
+    for codon, amino_acid in codon_amino_acid:
+        if codon == codons :
+            print (f"The amino acid that coden {codon} translates is {amino_acid}.")
+            return 
 
-# 创建画布
-plt.figure(figsize=(12, 6))
-
-# 绘制折线图
-plt.plot(weekly_avg['日期'], 
-         weekly_avg['睡眠时间'], 
-         marker='o', 
-         linestyle='-', 
-         color='steelblue',
-         linewidth=2,
-         markersize=8)
-
-# 设置图表样式
-plt.title('每周平均睡眠时间变化趋势', fontsize=14, pad=20)
-plt.xlabel('日期', fontsize=12)
-plt.ylabel('平均睡眠时间（小时）', fontsize=12)
-plt.grid(True, linestyle='--', alpha=0.7)
-
-# 格式化横坐标日期显示
-ax = plt.gca()
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d'))
-ax.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=mdates.SU))
-plt.xticks(rotation=45)
-
-# 显示数据标签
-for x, y in zip(weekly_avg['日期'], weekly_avg['睡眠时间']):
-    plt.text(x, y+0.1, f'{y:.1f}', 
-             ha='center', 
-             va='bottom',
-             fontsize=9)
-
-# 调整布局并显示
-plt.tight_layout()
-plt.show()
+max_key_list, max_val = max_count_2 (seq)
+for i in range (len(max_key_list)):
+    print(max_key_list[i], "is the maximum, with", max_val, "of its kind")
+    max_ami (max_key_list[i])
