@@ -1,84 +1,145 @@
 import random
-length = int(input("Enter the length of the RNA sequence: "))
-start_codon = random.choice(['AUG', 'AUA', 'AUC', 'AUG'])
-stop_codon = random.choice(['UAA', 'UAG', 'UGA'])
-def generate_random_rna(length):
-    # Define the possible nucleotides
-    nucleotides = ['A', 'C', 'G', 'U']
-    # Generate a random sequence of the specified length
-    return ''.join(random.choice(nucleotides) for _ in range(length))
-# Generate the random RNA sequence
-seq = generate_random_rna(length)
-def check_begin (seq):
-    begin = ["AUG"]
-    leng = len(seq)
-    pos = 0
-    for i in range (leng-2):
-        if seq[i:i+3] in begin:
-            pos = i
-            return (pos,leng)
+from collections import Counter
+import matplotlib.pyplot as plt
 
-def counter (seq):
-    end = ["UGA","UAA","UAG"]
-    count = {}
-    pos,leng = check_begin(seq)
-    i = pos+3
-    while i+3 <= leng and not(seq[i:i+3] in end) :
+# Codon to amino acid mapping (excluding stop codons)
+codon_to_aa = {
+    "UUU": "Phe", "UUC": "Phe", "UUA": "Leu", "UUG": "Leu",
+    "CUU": "Leu", "CUC": "Leu", "CUA": "Leu", "CUG": "Leu",
+    "AUU": "Ile", "AUC": "Ile", "AUA": "Ile", "AUG": "Met",
+    "GUU": "Val", "GUC": "Val", "GUA": "Val", "GUG": "Val",
+    "UCU": "Ser", "UCC": "Ser", "UCA": "Ser", "UCG": "Ser",
+    "CCU": "Pro", "CCC": "Pro", "CCA": "Pro", "CCG": "Pro",
+    "ACU": "Thr", "ACC": "Thr", "ACA": "Thr", "ACG": "Thr",
+    "GCU": "Ala", "GCC": "Ala", "GCA": "Ala", "GCG": "Ala",
+    "UAU": "Tyr", "UAC": "Tyr",
+    "CAU": "His", "CAC": "His", "CAA": "Gln", "CAG": "Gln",
+    "AAU": "Asn", "AAC": "Asn", "AAA": "Lys", "AAG": "Lys",
+    "GAU": "Asp", "GAC": "Asp", "GAA": "Glu", "GAG": "Glu",
+    "UGU": "Cys", "UGC": "Cys", "UGG": "Trp",
+    "CGU": "Arg", "CGC": "Arg", "CGA": "Arg", "CGG": "Arg",
+    "AGU": "Ser", "AGC": "Ser", "AGA": "Arg", "AGG": "Arg",
+    "GGU": "Gly", "GGC": "Gly", "GGA": "Gly", "GGG": "Gly"
+}
+
+def get_codons(seq):
+    """
+    Extract codons from the mRNA sequence until a stop codon is encountered.
+    Parameters:
+        seq (str): mRNA sequence, assumed to start with 'AUG'.
+    Returns:
+        list: List of codons, excluding the stop codon.
+    """
+    stop_codons = ["UAA", "UAG", "UGA"]
+    codons = []
+    for i in range(0, len(seq), 3):
+        if i + 3 > len(seq):
+            break
         codon = seq[i:i+3]
-        if not codon in count:
-            count[codon] = 1
-        else:
-            count[codon] += 1
-        i += 3
-    return (count)
-'''
-def max_count (seq):
-    count = counter(seq)
-    a = count.keys(0)
-    b = count[a]
-    max_count_res = {a: b}
-    for i in count.keys():
-        j = 0
-        max_val = max_count_res[max_count_res.keys(j)]
-        while j+1 < len(max_count_res):
-            val = max_count_res[max_count_res.keys(j+1)]
-            if val > max_val:
-                max_val = val
-                max_pos = max_count_res.keys(j+1)
-            j += 1
-        if count[i] >= max_val:
-            max_val = count[i]
-            max_pos = i
-        if not max_pos in max_count_res.keys():
-            max_count_res[max_pos] = 1
-        else:
-            max_count_res[max_pos] += 1
-    return (max_count_res) #This part has problem, the dictionary can't work, maybe change to two-dimensional list can fix!
-'''
-def max_count_2 (seq):
-    count = counter(seq)
-    key = list(count.keys())
-    val = list(count.values())
-    max_val = max(val)
-    max_key =[]
-    for i in range (len(key)):
-        if val[i] == max_val:
-            max_key.append(key[i])
-    return(max_key, max_val)
+        if codon in stop_codons:
+            break
+        codons.append(codon)
+    return codons
 
-def max_ami(codons):
-    codon_amino_acid = [("UUU", "Phe"),("UUC", "Phe"),("UUA", "Leu"),("UUG", "Leu"),("CUU", "Leu"),("CUC", "Leu"),("CUA", "Leu"),("CUG", "Leu"),("AUU", "Ile"),  
-    ("AUC", "Ile"),("AUA", "Ile"),("AUG", "Met"),("GUU", "Val"),("GUC", "Val"),("GUA", "Val"),("GUG", "Val"),("UCU", "Ser"),("UCC", "Ser"),("UCA", "Ser"),("UCG", "Ser"),  
-    ("CCU", "Pro"),("CCC", "Pro"),("CCA", "Pro"),("CCG", "Pro"),("ACU", "Thr"),("ACC", "Thr"),("ACA", "Thr"),("ACG", "Thr"),("GCU", "Ala"),("GCC", "Ala"),("GCA", "Ala"),
-    ("GCG", "Ala"),("UAU", "Tyr"),("UAC", "Tyr"),("UAA", "Stop"),("UAG", "Stop"),("CAU", "His"),("CAC", "His"),("CAA", "Gln"),("CAG", "Gln"),("AAU", "Asn"),("AAC", "Asn"),  
-    ("AAA", "Lys"),("AAG", "Lys"),("GAU", "Asp"),("GAC", "Asp"),("GAA", "Glu"),("GAG", "Glu"),("UGU", "Cys"),("UGC", "Cys"),("UGA", "Stop"),("UGG", "Trp"),("CGU", "Arg"),  
-    ("CGC", "Arg"),("CGA", "Arg"),("CGG", "Arg"),("AGU", "Ser"),("AGC", "Ser"),("AGA", "Arg"),("AGG", "Arg"),("GGU", "Gly"),("GGC", "Gly"),("GGA", "Gly"),("GGG", "Gly")]
-    for codon, amino_acid in codon_amino_acid:
-        if codon == codons :
-            print (f"The amino acid that coden {codon} translates is {amino_acid}.")
-            return 
+def most_frequent_codons(seq):
+    """
+    Find the most frequent codons in the sequence.
+    Parameters:
+        seq (str): mRNA sequence.
+    Returns:
+        tuple: (list of most frequent codons, frequency).
+    """
+    codons = get_codons(seq)
+    if not codons:
+        return [], 0
+    count = Counter(codons)
+    max_freq = max(count.values())
+    most_frequent = [codon for codon, freq in count.items() if freq == max_freq]
+    return most_frequent, max_freq
 
-max_key_list, max_val = max_count_2 (seq)
-for i in range (len(max_key_list)):
-    print(max_key_list[i], "is the maximum, with", max_val, "of its kind")
-    max_ami (max_key_list[i])
+def most_frequent_aas(seq):
+    """
+    Compute the amino acids corresponding to the most frequent codons.
+    Parameters:
+        seq (str): mRNA sequence.
+    Returns:
+        list: List of unique amino acids.
+    """
+    most_freq_codons, _ = most_frequent_codons(seq)
+    aas = [codon_to_aa.get(codon, "Unknown") for codon in most_freq_codons]
+    return list(set(aas))
+
+def plot_aa_frequencies(seq):
+    """
+    Plot the frequency distribution of amino acids in the sequence.
+    Parameters:
+        seq (str): mRNA sequence.
+    """
+    codons = get_codons(seq)
+    aas = [codon_to_aa.get(codon, "Unknown") for codon in codons]
+    if not aas:
+        print("No amino acids to plot.")
+        return
+    count = Counter(aas)
+    amino_acids = list(count.keys())
+    frequencies = list(count.values())
+    # Sort by amino acid name
+    sorted_indices = sorted(range(len(amino_acids)), key=lambda x: amino_acids[x])
+    sorted_aas = [amino_acids[i] for i in sorted_indices]
+    sorted_freq = [frequencies[i] for i in sorted_indices]
+    plt.figure(figsize=(10, 6))
+    plt.bar(sorted_aas, sorted_freq, color='skyblue')
+    plt.xlabel('Amino Acid')
+    plt.ylabel('Frequency')
+    plt.title('Amino Acid Frequency Distribution')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+def plot_codon_frequencies(seq):
+    """
+    Plot the frequency distribution of codons in the sequence (additional feature).
+    Parameters:
+        seq (str): mRNA sequence.
+    """
+    codons = get_codons(seq)
+    if not codons:
+        print("No codons to plot.")
+        return
+    count = Counter(codons)
+    codons_list = list(count.keys())
+    frequencies = list(count.values())
+    # Sort by codon name
+    sorted_indices = sorted(range(len(codons_list)), key=lambda x: codons_list[x])
+    sorted_codons = [codons_list[i] for i in sorted_indices]
+    sorted_freq = [frequencies[i] for i in sorted_indices]
+    plt.figure(figsize=(12, 6))
+    plt.bar(sorted_codons, sorted_freq, color='lightgreen')
+    plt.xlabel('Codon')
+    plt.ylabel('Frequency')
+    plt.title('Codon Frequency Distribution')
+    plt.xticks(rotation=90)
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    # Get user input for mRNA sequence
+    seq = input("Enter the mRNA sequence: ").upper().replace(" ", "")
+    print("Input sequence:", seq)
+    
+    # Task 1: Most frequent codons
+    most_freq_codons, freq = most_frequent_codons(seq)
+    if most_freq_codons:
+        print(f"Most frequent codons: {', '.join(most_freq_codons)}, frequency: {freq}")
+        
+        # Task 2: Corresponding amino acids
+        most_freq_aas = most_frequent_aas(seq)
+        print(f"Corresponding amino acids: {', '.join(most_freq_aas)}")
+        
+        # Task 3: Plot amino acid frequencies
+        plot_aa_frequencies(seq)
+        
+        # Task 4: Plot codon frequencies
+        plot_codon_frequencies(seq)
+    else:
+        print("No codons found in the sequence.")
