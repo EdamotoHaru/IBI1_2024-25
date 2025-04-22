@@ -7,7 +7,7 @@ if 18 <= age:
     dosage_per_kg = 25 # Dosage for adults
 def dosage_calculator(weight, dosage_per_kg):
     if 10 < weight < 200: # I have a body weight larger than 100kg when I was 18 so I set the limit to 200
-        # Calculate the dosage based on weight and agea
+        # Calculate the dosage based on weight and ages
         dosage = weight * dosage_per_kg
         return dosage
     else:
