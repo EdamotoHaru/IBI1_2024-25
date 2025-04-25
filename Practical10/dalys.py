@@ -1,20 +1,26 @@
+'''
+Pseudocode
+Set working directory (adjust path as needed)
+Import dataset
+Explore dataframe
+Task: Show the third column (Year) for the first 10 rows
+Task: Use Boolean to show DALYs for all countries in 1990
+
+'''
 # dalys.py
-# Practical 10: Working with Global Health Data
+# Practical 10: Working with Global Health Data 
 
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Set working directory (adjust path as needed)
 os.chdir("/Users/edamotoharu/Library/Mobile Documents/com~apple~CloudDocs/Documents/GitHub/IBI1_2024-25/Practical10")  # Change to your directory
 print("Current directory:", os.getcwd())  # Verify directory
 print("Files in directory:", os.listdir())  # List files
 
-# Import dataset
 dalys_data = pd.read_csv("dalys-rate-from-all-causes.csv")
 
-# Explore dataframe
 print("\nFirst 5 rows of dataframe:")
 print(dalys_data.head(5))
 print("\nDataframe info:")
@@ -22,7 +28,6 @@ print(dalys_data.info())
 print("\nDataframe description:")
 print(dalys_data.describe())
 
-# Task: Show the third column (Year) for the first 10 rows
 print("\nYear column for first 10 rows:")
 print(dalys_data.iloc[0:10, 2])
 # Identify the 10th year for Afghanistan
@@ -30,7 +35,6 @@ print(dalys_data.iloc[0:10, 2])
 tenth_year_afghanistan = dalys_data.iloc[9, 2]
 print(f"The 10th year for DALYs in Afghanistan is: {tenth_year_afghanistan}")  # Should be 1999
 
-# Task: Use Boolean to show DALYs for all countries in 1990
 daly_1990 = dalys_data.loc[dalys_data["Year"] == 1990, "DALYs"]
 print("\nDALYs for all countries in 1990:")
 print(daly_1990)
