@@ -3,9 +3,12 @@ Pseudocode
 Set working directory (adjust path as needed)
 Import dataset
 Explore dataframe
-Task: Show the third column (Year) for the first 10 rows
-Task: Use Boolean to show DALYs for all countries in 1990
-
+Show the third column (Year) for the first 10 rows
+Use Boolean to show DALYs for all countries in 1990
+Compute mean DALYs for UK and France
+Plot the result
+Answer a custom question
+# How have DALYs in China changed over time compared to the UK?
 '''
 # dalys.py
 # Practical 10: Working with Global Health Data 
