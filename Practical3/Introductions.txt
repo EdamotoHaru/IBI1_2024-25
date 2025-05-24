@@ -1,4 +1,4 @@
 Hello, my name is EdamotoHaru or ZHOU You.
 I like drinking tea and coffee.
 I am enjoying learning IBI1 in person 
-I am happy that I can push my repo from Visual Studio Code to GitHub too
+I am happy that I can push my repo from Visual Studio Code to GitHub too.
