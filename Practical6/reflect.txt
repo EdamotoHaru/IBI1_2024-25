@@ -1,1 +1,3 @@
+Of course this pratical is not easy. As it combains many points into one workflow.
+Simly follow the guidance to create visual plots is easy, but to fully undersand the cooperation of random function and visualization function can be flexible.
 For this practical, the most difficult one is task 3.As it requests us to use the new model into a more complex task.
