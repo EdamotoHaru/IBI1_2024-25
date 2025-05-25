@@ -2,8 +2,7 @@
 import re  # Import the regular expression module for pattern matching
 
 # file_path stores the path to the input FASTA file
-file_path = "Saccharomyces_cerevisiae.R64-1-1.cdna.all.fa"
-
+file_path = 'Saccharomyces_cerevisiae.R64-1-1.cdna.all.fa'  # Define the file path for the input FASTA file
 # Define a function to read a FASTA file and parse its contents
 def read_fasta(file_path):
     genes = {}  # Initialize a dictionary to store gene sequences
