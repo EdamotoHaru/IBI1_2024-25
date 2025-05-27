@@ -3,9 +3,9 @@
 # Draw two pie charts to show the population distribution of UK countries and China's provinces.
 # Show the pie charts.
 uk_countries=[57.11,3.13,1.91,5.45]
-china_provinces=[65.77,41.88,45.28,61.27,85.15]
+china_provinces=[41.88,45.28,61.27,85.15]
 uk_countries_name=["England","Wales","Northern Ireland","Scotland"]
-china_provinces_name=["Zhejiang","Fujian","Jiangxi","Anhui","Jiangsu"]
+china_provinces_name=["Fujian","Jiangxi","Anhui","Jiangsu"]
 import matplotlib.pyplot as plt
 import numpy as np  
 # Create a pie chart for UK countries
