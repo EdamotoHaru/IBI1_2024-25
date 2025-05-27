@@ -27,8 +27,8 @@ beta = 0.3   # Infection probability (probability of infecting a susceptible nei
 gamma = 0.05 # Recovery probability (probability of recovering from infection)
 
 # Set up for snapshots
-time_points = [0, 10, 50, 100]       # 需要记录快照的时间点
-snapshots = [(0, population.copy())] # 记录初始状态（使用copy防止引用问题）
+time_points = [0, 10, 50, 100]       # Record population state at these time points
+snapshots = [(0, population.copy())] # Record initial state
 
 # Main simulation loop
 for t in range(100):

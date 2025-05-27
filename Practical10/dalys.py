@@ -61,7 +61,7 @@ plt.tight_layout()
 plt.savefig("uk_dalys_plot.png")  # Save plot
 plt.show()
 
-# Task: Answer a custom question (Line 60 starts this section)
+# Task: Answer a custom question (Line 66 starts this section)
 # Question: How have DALYs in China changed over time compared to the UK?
 china_data = dalys_data.loc[dalys_data["Entity"] == "China", ["DALYs", "Year"]]
 plt.figure(figsize=(10, 6))

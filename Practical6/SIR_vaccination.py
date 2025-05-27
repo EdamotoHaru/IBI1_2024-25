@@ -14,22 +14,23 @@ def simulate_vaccination(vaccination_rates):
     time_steps = 1000
     # Implement the SIR model
     for i in range(time_steps):
+       #Keep the values of S, I, and R non-negative
+        S = max(S, 0)
+        I = max(I, 0)
+        R = max(R, 0)
         infect_rate = beta * I / N
         new_infections = np.random.binomial(S, infect_rate)
         new_recoveries = np.random.binomial(I, gamma)
         S -= new_infections
         I += new_infections - new_recoveries
         R += new_recoveries
-        #Keep the values of S, I, and R non-negative
-        S = max(S, 0)
-        I = max(I, 0)
-        R = max(R, 0)
+        
 
         Infected.append(I)
 
     return Infected
 
-vaccination_rates = np.arange(0, 0.9, 0.1)  # Vaccination rate
+vaccination_rates = np.arange(0, 1.1, 0.1)  # Vaccination rate
 # Plot the results
 for rate in vaccination_rates:
     Infected = simulate_vaccination(rate)
